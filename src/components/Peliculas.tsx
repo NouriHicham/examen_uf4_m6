@@ -1,5 +1,12 @@
 import Image from "next/image";
 
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average: number;
+}
+
 async function getPopularMovies() {
   const res = await fetch('https://api.themoviedb.org/3/movie/popular', {
     method: 'GET',
@@ -30,7 +37,7 @@ export default async function Peliculas() {
         />
       </form>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {pelis.results.map((peli: any) => (
+        {pelis.results.map((peli: Movie) => (
           <div key={peli.id} className=" rounded-lg shadow-md p-4">
             <Image src={`https://image.tmdb.org/t/p/w500/${peli.poster_path}`} alt={peli.title} className="w-full object-cover" width={500} height={500}/>
             <div className="pt-4">
