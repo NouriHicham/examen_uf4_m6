@@ -50,6 +50,18 @@ export default function Detalle({ id }: { id: number }) {
     if (id) fetchMovie();
   }, [id]);
 
+  const toggleFavoritos = () => {
+    const favoritos = localStorage.getItem("favoritos");
+    let favoritosArray = favoritos ? JSON.parse(favoritos) : [];
+    if (favoritosArray.includes(id)) {
+      favoritosArray = favoritosArray.filter((idFav: number) => idFav !== id);
+    } else {
+      favoritosArray.push(id);
+    }
+    localStorage.setItem("favoritos", JSON.stringify(favoritosArray));
+    window.location.reload();
+  };
+
   if (!movie) return <div>Cargando...</div>;
 
   return (
@@ -63,9 +75,15 @@ export default function Detalle({ id }: { id: number }) {
       />
       <h1 className="text-xl font-bold mt-2 text-white">{movie.title}</h1>
       <div className="flex mt-2">
-        <button className="mr-2 border border-0.5 text-white text-sm py-2 px-4 rounded cursor-pointer">
-          Añadir favorito
-        </button>
+        {localStorage.getItem("favoritos")?.includes(`${id}`) ? (
+          <button className="mr-2 border border-0.5 text-white text-sm py-2 px-4 rounded cursor-pointer" onClick={toggleFavoritos}>
+            Eliminar favorito
+          </button>
+        ): (
+          <button className="mr-2 border border-0.5 text-white text-sm py-2 px-4 rounded cursor-pointer" onClick={toggleFavoritos}>
+            Añadir favorito
+          </button>
+        )}
         <button className="mr-2 text-black bg-white text-sm py-2 px-4 rounded cursor-pointer">
           Ver Trailer
         </button>
